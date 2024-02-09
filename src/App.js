@@ -1,101 +1,46 @@
 import {Component} from 'react'
-import {Route, Switch, Redirect} from 'react-router-dom'
-import BookItemDetails from './components/BookItemDetails'
-
-import Bookshelves from './components/Bookshelves'
+import {Switch, Route, Redirect} from 'react-router-dom'
+import Login from './components/Login'
 import Home from './components/Home'
-import LoginForm from './components/LoginForm'
-import ProtectedRoute from './components/ProtectedRoute'
+import Bookshelves from './components/Bookshelves'
+import BookDetails from './components/BookDetails'
 import NotFound from './components/NotFound'
-import HeaderContext from './context/HeaderContext'
-import Favorites from './components/Favorites'
+import ProtectedRoute from './components/ProtectedRoute'
+
+import BookHubThemeContext from './context/BookHubThemeContext'
+
 import './App.css'
 
 class App extends Component {
-  state = {
-    showNavIcons: false,
-    activeNavId: '',
-    isDarkTheme: false,
-    favoritesList: [],
-  }
+  state = {isDarkTheme: false}
 
-  updateActiveNavId = navId => {
-    this.setState({activeNavId: navId})
-  }
-
-  onToggleTheme = () => {
-    this.setState(prevState => ({isDarkTheme: !prevState.isDarkTheme}))
-  }
-
-  onToggleIcon = () => {
+  onClickThemeIcon = () => {
     this.setState(prevState => ({
-      showNavIcons: !prevState.showNavIcons,
+      isDarkTheme: !prevState.isDarkTheme,
     }))
   }
 
-  onClose = () => {
-    this.setState({showNavIcons: false})
-  }
-
-  removeAllFavorites = () => {
-    this.setState({favoritesList: []})
-    localStorage.setItem('favorites_list', [])
-  }
-
-  addFavorites = book => {
-    const {favoritesList} = this.state
-    const bookObject = favoritesList.find(eachBook => eachBook.id === book.id)
-    if (bookObject === undefined) {
-      this.setState(prevState => ({
-        favoritesList: [...prevState.favoritesList, book],
-      }))
-    }
-  }
-
-  removeFavorites = id => {
-    const {favoritesList} = this.state
-    const updatedFavoritesList = favoritesList.filter(
-      eachItem => eachItem.id !== id,
-    )
-
-    this.setState({favoritesList: updatedFavoritesList})
-  }
-
   render() {
-    const {showNavIcons, activeNavId, isDarkTheme, favoritesList} = this.state
-    const appBg = isDarkTheme ? 'dark-theme' : 'light-theme'
+    const {isDarkTheme} = this.state
+
     return (
-      <HeaderContext.Provider
+      <BookHubThemeContext.Provider
         value={{
-          showNavIcons,
-          activeNavId,
-          updateActiveNavId: this.updateActiveNavId,
-          onToggleIcon: this.onToggleIcon,
-          onClose: this.onClose,
           isDarkTheme,
-          onToggleTheme: this.onToggleTheme,
-          favoritesList,
-          removeAllFavorites: this.removeAllFavorites,
-          removeFavorites: this.removeFavorites,
-          addFavorites: this.addFavorites,
+          onClickThemeIcon: this.onClickThemeIcon,
         }}
       >
-        <div className={`app-container ${appBg}`}>
+        <>
           <Switch>
-            <Route exact path="/login" component={LoginForm} />
+            <Route exact path="/login" component={Login} />
             <ProtectedRoute exact path="/" component={Home} />
             <ProtectedRoute exact path="/shelf" component={Bookshelves} />
-            <ProtectedRoute
-              exact
-              path="/books/:id"
-              component={BookItemDetails}
-            />
-            <ProtectedRoute exact path="/favorites" component={Favorites} />
+            <ProtectedRoute exact path="/books/:id" component={BookDetails} />
             <Route path="/not-found" component={NotFound} />
-            <Redirect to="not-found" />
+            <Redirect to="/not-found" />
           </Switch>
-        </div>
-      </HeaderContext.Provider>
+        </>
+      </BookHubThemeContext.Provider>
     )
   }
 }
