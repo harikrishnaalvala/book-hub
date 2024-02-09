@@ -1,76 +1,34 @@
-import {
-  FaGoogle,
-  FaTwitter,
-  FaLinkedin,
-  FaGithub,
-  FaInstagram,
-  FaYoutube,
-} from 'react-icons/fa'
+import {FaGoogle, FaTwitter, FaInstagram, FaYoutube} from 'react-icons/fa'
 
-import HeaderContext from '../../context/HeaderContext'
+import BookHubThemeContext from '../../context/BookHubThemeContext'
 import './index.css'
 
 const Footer = () => (
-  <HeaderContext.Consumer>
+  <BookHubThemeContext.Consumer>
     {value => {
       const {isDarkTheme} = value
-
-      const footerDarkText = isDarkTheme ? 'footer-dark-text' : ''
+      const textColor = !isDarkTheme ? 'light-theme-text' : 'dark-theme-text'
 
       return (
         <div className="footer-container">
-          <div className="icons-container">
-            <a href="mailto:gkirang4@gmail.com" className="footer-icon-button">
-              <FaGoogle className={`footer-icon ${footerDarkText}`} />
-            </a>
-            <a
-              href="https://www.linkedin.com/in/gottumukkalakiran/"
-              target="__blank"
-              rel="noopener noreferrer"
-              className="footer-icon-button"
-            >
-              <FaLinkedin className={`footer-icon ${footerDarkText}`} />
-            </a>
-            <a
-              href="https://github.com/gottumukkalakiran"
-              target="__blank"
-              rel="noopener noreferrer"
-              className="footer-icon-button"
-            >
-              <FaGithub className={`footer-icon ${footerDarkText}`} />
-            </a>
-            <a
-              href="https://www.twitter.com"
-              target="__blank"
-              rel="noopener noreferrer"
-              className="footer-icon-button"
-            >
-              <FaTwitter className={`footer-icon ${footerDarkText}`} />
-            </a>
-            <a
-              href="https://www.instagram.com/kiran_gottumukkala/"
-              target="__blank"
-              rel="noopener noreferrer"
-              type="button"
-              className="footer-icon-button"
-            >
-              <FaInstagram className={`footer-icon ${footerDarkText}`} />
-            </a>
-            <a
-              href="https://www.youtube.com/@kirangottumukkala/featured"
-              target="__blank"
-              rel="noopener noreferrer"
-              type="button"
-              className="footer-icon-button"
-            >
-              <FaYoutube className={`footer-icon ${footerDarkText}`} />
-            </a>
+          <div className="responsive-footer">
+            <button type="button" className="footer-buttons">
+              <FaGoogle className={textColor} size={20} />
+            </button>
+            <button type="button" className="footer-buttons">
+              <FaTwitter className={textColor} size={20} />
+            </button>
+            <button type="button" className="footer-buttons">
+              <FaInstagram className={textColor} size={20} />
+            </button>
+            <button type="button" className="footer-buttons">
+              <FaYoutube className={textColor} size={20} />
+            </button>
           </div>
-          <p className={`contact-us-text ${footerDarkText}`}>Contact us</p>
+          <p className={`contact-us-heading ${textColor}`}>Contact Us</p>
         </div>
       )
     }}
-  </HeaderContext.Consumer>
+  </BookHubThemeContext.Consumer>
 )
-
 export default Footer
